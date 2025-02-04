@@ -1,8 +1,10 @@
 import os
+import random
 # file = open("text.txt","w")
 # file.write("SUS")
 # file.close()
 from abc import  abstractmethod
+from random import randint
 
 """file = open("ITSTEP TEST.txt","w")
 inf = ''
@@ -49,6 +51,10 @@ class Person:
     def show_info(self):
         pass
 
+    @abstractmethod
+    def para(self):
+        pass
+
 
 
 class Student(Person):
@@ -63,6 +69,22 @@ class Student(Person):
 
         with open(file, "r") as myFile:
             print(myFile.readlines())
+    def para(self):
+        if self.id % 2 != 0:
+            self.id = randint(1, 100)
 obg = Person("def", "def", "def")
-obg1 = Student("def", "def", "def")
+obg1 = Student("def", "def", randint(1, 100))
+obg2 = Student("def", "def", randint(1, 100))
+obg3 = Student("def", "def", randint(1, 100))
+obg4 = Student("def", "def", randint(1, 100))
+obg5 = Student("def", "def", randint(1, 100))
 obg1.show_info()
+ob = [obg1,obg2,obg3,obg4,obg5]
+def para_id(ob):
+    for i in ob:
+        i.para()
+        print(i.id)
+    for i in ob:
+        print(f"End id:{i.id}")
+
+para_id(ob)
