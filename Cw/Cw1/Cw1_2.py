@@ -1,4 +1,4 @@
-# import os
+import os
 # file = open("text.txt","w")
 # file.write("SUS")
 # file.close()
@@ -36,25 +36,33 @@ with open("I.txt","w") as IFile:
 with open(file,"r") as myFile:
     print(myFile.readlines())"""
 
-class TRANSPORT:
-    def __init__(self, name, speed):
+file = "Student.txt"
+
+
+class Person:
+    def __init__(self, name, lastname, id):
         self.name = name
-        self.speed = speed
+        self.lastname = lastname
+        self.id = id
 
     @abstractmethod
-    def show_trans(self):
-        pass
-
-    @abstractmethod
-    def set_speed(self):
+    def show_info(self):
         pass
 
 
-class CAR(TRANSPORT):
-    def __init__(self, name, speed):
-        super().__init__(name, speed)
-    def show_trans(self):
-        return f"name {self.name}, speed {self.speed}"
-    def set_speed(self):
-        tmp_s = int(input("New speed:"))
-        self.speed = tmp_s
+
+class Student(Person):
+    def __init__(self, name, lastname, id):
+        super().__init__(name, lastname, id)
+
+    def show_info(self):
+        with open("Student.txt", "w") as IFile:
+            IFile.write(f"name: {self.name}  ")
+            IFile.write(f"lastname: {self.lastname}  ")
+            IFile.write(f"id: {self.id}  ")
+
+        with open(file, "r") as myFile:
+            print(myFile.readlines())
+obg = Person("def", "def", "def")
+obg1 = Student("def", "def", "def")
+obg1.show_info()
