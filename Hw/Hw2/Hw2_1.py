@@ -1,7 +1,5 @@
-from abc import  abstractmethod
 import os
 from abc import  abstractmethod
-from random import randint
 
 
 class Bank:
