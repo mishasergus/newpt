@@ -28,9 +28,7 @@ class Terminal(Bank):
     def show(self):
         file = "Terminal.txt"
         with open("Terminal.txt", "w") as terminalFile:
-            terminalFile.write(f"Name: {self.name}")
-            terminalFile.write(f"street: {self.street}")
-            terminalFile.write(f"count of cash: {self.count_of_cash}")
+            terminalFile.write(f"Name: {self.name}, street: {self.street}, count of cash: {self.count_of_cash}")
         with open(file, "r") as terFile:
             print(terFile.readlines())
 
