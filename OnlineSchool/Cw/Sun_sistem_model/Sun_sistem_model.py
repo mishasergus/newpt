@@ -67,7 +67,7 @@ ax1.tick_params(colors = "white")
 ax1.plot(0, 0, 'o',color = "yellow", markersize = 15)
 
 asteroids = [Planet(name = "", radius = random.uniform(0.5,1), a_orbit = random.uniform(1.9,2.1),b_orbit = random.uniform(1.5,1.7), angle_velocity = 2*np.pi / (1716.675 / 365.25),
-           mass = 1, color = "gray") for i in range(100)]
+           mass = 1, color = "gray") for i in range(150)]
 for asteroid in asteroids:
     asteroid.x = random.uniform(-asteroid.a_orbit, asteroid.a_orbit)
     znak = [1,-1]
@@ -121,7 +121,7 @@ canvas1 = FigureCanvasTkAgg(fig1,master=left_frame)
 #                               місце знаходження
 canvas1.get_tk_widget().pack(fill = tk.BOTH,expand = True)
 
-ani1 = FuncAnimation(fig1, near_planet_animation, frames = 480, interval = 3)
+ani1 = FuncAnimation(fig1, near_planet_animation, frames = 480, interval = 1, blit = False)
 """                                                                        , blit = True"""
 
 
@@ -173,7 +173,7 @@ canvas2 = FigureCanvasTkAgg(fig2,master=right_frame)
 #                               місце знаходження
 canvas2.get_tk_widget().pack(fill = tk.BOTH,expand = True)
 
-ani2 = FuncAnimation(fig2, far_planet_animation, frames = 480, interval = 3)
+ani2 = FuncAnimation(fig2, far_planet_animation, frames = 480, interval = 1, blit = False)
 """                                                                        , blit = True"""
 def on_closing():
     if 'ani1' in globals() and ani1 is not None:
