@@ -23,7 +23,7 @@ class Planet:
 
 
     def movement(self):
-        self.angle += self.angle_velocity * 0.002
+        self.angle += self.angle_velocity * 0.004
         self.x = self.a_orbit * np.cos(self.angle)
         self.y = self.b_orbit * np.sin(self.angle)
 
