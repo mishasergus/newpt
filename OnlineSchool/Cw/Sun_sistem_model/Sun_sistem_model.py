@@ -69,10 +69,6 @@ ax1.plot(0, 0, 'o',color = "yellow", markersize = 15)
 asteroids = [Planet(name = "", radius = random.uniform(0.5,1), a_orbit = random.uniform(1.9,2.1),b_orbit = random.uniform(1.5,1.7), angle_velocity = 2*np.pi / (1716.675 / 365.25),
            mass = 1, color = "gray") for i in range(150)]
 for asteroid in asteroids:
-    asteroid.x = random.uniform(-asteroid.a_orbit, asteroid.a_orbit)
-    znak = [1,-1]
-    prom = random.randint(0,1)
-    asteroid.y = znak[prom]*(asteroid.b_orbit/asteroid.a_orbit)*np.sqrt((asteroid.a_orbit**2)-(asteroid.x**2)) + random.uniform(-0.1,0.1)
     asteroid.angle = random.uniform(0, 2 * np.pi)
 asterOrbit = Planet(name = "Great asteroid belt", radius = 0, a_orbit = 2,b_orbit = 1.6, angle_velocity = 2*np.pi / (1716.675 / 365.25),
            mass = 1, color = "black")

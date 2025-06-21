@@ -1,0 +1,1 @@
+Name: def, street: def, count of cash: 33
