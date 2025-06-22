@@ -92,8 +92,8 @@ ax.set_zlim(-ax_limit, ax_limit)
 ax.plot([0], [0], [0], 'o', color = "yellow", markersize = sun_size)
 
 
-asteroids = [Planet(name = "", radius = random.uniform(0.5,1), a_orbit = random.uniform(1.9,2.1),b_orbit = random.uniform(1.5,1.7), angle_velocity = 2*np.pi / (1716.675 / 365.25),
-           mass = 1, color = "gray") for i in range(150)]
+asteroids = [Planet(name = "", radius = random.uniform(0.5, 1), a_orbit = random.uniform(1.9,2.1),b_orbit = random.uniform(1.5,1.7), angle_velocity = 2*np.pi / (1716.675 / 365.25),
+           mass = 1, color = "gray",tilt = random.randint(-10,10)) for i in range(150)]
 for asteroid in asteroids:
     asteroid.angle = random.uniform(0, 2 * np.pi)
 asterOrbit = Planet(name = "Great asteroid belt", radius = 0, a_orbit = 2,b_orbit = 1.6, angle_velocity = 2*np.pi / (1716.675 / 365.25),
