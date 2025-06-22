@@ -52,6 +52,8 @@ class Planet:
 
 
 
+
+
 ax_limit = 50
 zoom_scale = 1
 sun_size = 15
