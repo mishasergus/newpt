@@ -8,14 +8,15 @@ import random
 import math
 
 class Ball:
-    def __init__(self,canvas, x, y, v_x, v_y,radius = 20,colour = 'red'):
+    def __init__(self,canvas, x, y, v_x, v_y,radius = 20, colour = 'red'):
         self.canvas = canvas
-        self.radius = 20
+        self.radius = radius
         self.colour = 'red'
         self.x = x
         self.y = y
         self.v_x = v_x
         self.v_y = v_y
+        self.active = True
 
         self.ball_id = self.canvas.create_oval(
             x - radius, y - radius,
@@ -24,10 +25,14 @@ class Ball:
         )
 
     def move(self):
+        if not self.active:
+            return
         self.x += self.v_x * 1
         self.y += self.v_y * 1
-        self.v_x -= self.v_x*0.02
+
+        self.v_x -= self.v_x * 0.02
         self.v_y -= self.v_y * 0.02
+
         self.wall_collision_check()
         self.canvas.coords(self.ball_id,
                            self.x - self.radius, self.y - self.radius,
@@ -42,6 +47,27 @@ class Ball:
         if self.y - self.radius <= 0 or self.y + self.radius >= height:
             self.v_y = -self.v_y
 
+    def collision_check(self, other):
+        dx = other.x - self.x
+        dy = other.y - self.y
+        dist = np.sqrt(dx ** 2 + dy ** 2)
+        if dist == 0:
+            dist = 0.05
+        if dist < other.radius + self.radius:
+            nx = dx / dist
+            ny = dy / dist
+            p1 = self.v_x * nx + self.v_y * ny
+            p2 = other.v_x * nx + other.v_y * ny
+            self.v_x += (p2-p1) * nx
+            self.v_y += (p2 - p1) * ny
+            other.v_x += (p1 - p2) * nx
+            other.v_y += (p1 - p2) * ny
+            overlap = other.radius + self.radius - dist
+            self.x -= nx * overlap / 2
+            self.y -= ny * overlap / 2
+            other.x += nx * overlap / 2
+            other.y += ny * overlap / 2
+
 
 class TableApp:
     def __init__(self,root):
@@ -54,52 +80,40 @@ class TableApp:
 
         self.canvas = tk.Canvas(root, width = 800, height = 400, bg = "green",highlightthickness=3,highlightbackground="black")
         self.canvas.pack()
-        self.louses_arr = [self.canvas.create_oval(
-            0 - 30, 0 - 30,
-            0 + 30, 0 + 30,
-            fill='black'
-        ),
-        self.canvas.create_oval(
-            0 - 30, 400 - 30,
-            0 + 30, 400 + 30,
-            fill='black'
-        ),
-        self.canvas.create_oval(
-            800 - 30, 0 - 30,
-            800 + 30, 0 + 30,
-            fill='black'
-        ),
-        self.canvas.create_oval(
-            800 - 30, 400 - 30,
-            800 + 30, 400 + 30,
-            fill='black'
-        ),
-        self.canvas.create_oval(
-            400 - 30, -10 - 30,
-            400 + 30, -10 + 30,
-            fill='black'
-        ),
-        self.canvas.create_oval(
-            400 - 30, 410 - 30,
-            400 + 30, 410 + 30,
-            fill='black'
-        )
-        ]
 
-        self.louses_coord_arr = [[0, 0],
-                                  [0, 400],
-                                  [800, 0],
-                                  [800, 400],
-                                  [400, -10],
-                                  [400, 410]
-                                 ]
+        self.pockets = []
+        self.balls = []
+
+
+
 
         self.first_click = None
         self.click_indicator = None
-        self.ball = None
 
         self.canvas.bind("<Button-1>", self.click)
+        self.drow_pockets()
         self.ball_move()
+
+    def drow_pockets(self):
+        width = int(self.canvas['width'])
+        height = int(self.canvas['height'])
+
+        par = [
+            (0,0,30),
+            (width // 2, -10, 30),
+            (width, 0, 30),
+            (0, height, 30),
+            (width // 2, height+10, 30),
+            (width, height, 30)
+        ]
+        for x,y,r in par:
+            poc = self.canvas.create_oval(
+            x - r, y - r,
+            x + r, y + r,
+            fill='black'
+            )
+            self.pockets.append([x,y,r])
+
 
     def click(self, event):
         if self.first_click is None:
@@ -123,23 +137,31 @@ class TableApp:
             v_x = dx * speed_scale
             v_y = dy * speed_scale
 
-            if self.ball:
-                self.canvas.delete(self.ball.ball_id)
-
-            self.ball = Ball(self.canvas, x1, y1, v_x, v_y)
-
+            ball = Ball(self.canvas, x1, y1, v_x, v_y)
+            self.balls.append(ball)
             self.first_click = None
             self.canvas.delete(self.click_indicator)
+
+    def check_pockets(self, ball):
+        for x, y, r in self.pockets:
+            if (((ball.x - x) ** 2) + ((ball.y - y) ** 2) <= r**2):
+                self.scoreN += 1
+                self.score.config(text=str(self.scoreN))
+                return True
+        return False
+
     def ball_move(self):
-        if self.ball:
-            self.ball.move()
-            for x, y in self.louses_coord_arr:
-                if(((self.ball.x - x)**2)+((self.ball.y - y)**2) <= 900):
-                    self.canvas.delete(self.ball.ball_id)
-                    self.ball = None
-                    self.scoreN += 1
-                    self.score.config(text=str(self.scoreN))
-                    break
+        for ball in self.balls:
+            ball.move()
+        for i in range(len(self.balls)):
+            for j in range(i + 1, len(self.balls)):
+                if self.balls[i].active and self.balls[j].active:
+                    self.balls[i].collision_check(self.balls[j])
+
+        for ball in self.balls:
+            if ball.active and self.check_pockets(ball):
+                self.canvas.delete(ball.ball_id)
+                ball.active = False
         self.root.after(30, self.ball_move)
 
 
