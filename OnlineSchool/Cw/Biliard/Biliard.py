@@ -18,6 +18,8 @@ class Ball:
         self.v_y = v_y
         self.active = True
 
+        self.inf = [0,1]
+
         self.ball_id = self.canvas.create_oval(
             x - radius, y - radius,
             x + radius, y + radius,
@@ -44,8 +46,10 @@ class Ball:
 
         if self.x - self.radius <= 0 or self.x + self.radius >= width:
             self.v_x = -self.v_x
+            self.inf[0] += 1
         if self.y - self.radius <= 0 or self.y + self.radius >= height:
             self.v_y = -self.v_y
+            self.inf[0] += 1
 
     def collision_check(self, other):
         dx = other.x - self.x
@@ -67,6 +71,7 @@ class Ball:
             self.y -= ny * overlap / 2
             other.x += nx * overlap / 2
             other.y += ny * overlap / 2
+            self.inf[0] += 1
 
 
 class TableApp:
@@ -75,8 +80,17 @@ class TableApp:
         self.root.title("BILIARD")
         self.scoreN = 0
 
-        self.score = tk.Label(root, text = "0", font=("Arial Black", 20))
-        self.score.pack()
+        self.score = tk.Label(root, text = f"Score: {self.scoreN}", font=("Arial Black", 20))
+        self.score.pack(pady = 5)
+
+        self.getter = tk.Entry(root, width=50)
+        self.getter.pack(pady = 5)
+
+        self.text_is_exist = tk.Label(root, text=f"Is exist: ", font=("Arial Black", 10))
+        self.text_is_exist.pack(pady = 5)
+
+        self.text_num_of_collisions = tk.Label(root, text=f"Collisions: ", font=("Arial Black", 10))
+        self.text_num_of_collisions.pack(pady = 5)
 
         self.canvas = tk.Canvas(root, width = 800, height = 400, bg = "green",highlightthickness=3,highlightbackground="black")
         self.canvas.pack()
@@ -146,11 +160,23 @@ class TableApp:
         for x, y, r in self.pockets:
             if (((ball.x - x) ** 2) + ((ball.y - y) ** 2) <= r**2):
                 self.scoreN += 1
-                self.score.config(text=str(self.scoreN))
+                self.score.config(text=str(f"Score: {self.scoreN}"))
                 return True
         return False
 
     def ball_move(self):
+        index = 0
+        try:
+            if int(self.getter.get()) >= 0 and int(self.getter.get()) < len(self.balls):
+                index = int(self.getter.get())
+        except:
+            index = 0
+        try:
+            self.text_num_of_collisions.config(text=str(f"Collisions: {self.balls[index].inf[0]}"))
+            self.text_is_exist.config(text=str(f"Is exist: {bool(self.balls[index].inf[1])}"))
+        except:
+            self.text_num_of_collisions.config(text=str(f"Collisions: 0"))
+            self.text_is_exist.config(text=str(f"Is exist: False"))
         for ball in self.balls:
             ball.move()
         for i in range(len(self.balls)):
@@ -162,6 +188,7 @@ class TableApp:
             if ball.active and self.check_pockets(ball):
                 self.canvas.delete(ball.ball_id)
                 ball.active = False
+                ball.inf[1] = 0
         self.root.after(30, self.ball_move)
 
 
