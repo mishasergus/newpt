@@ -72,6 +72,7 @@ class Ball:
             other.x += nx * overlap / 2
             other.y += ny * overlap / 2
             self.inf[0] += 1
+            other.inf[0] += 1
 
 
 class TableApp:
