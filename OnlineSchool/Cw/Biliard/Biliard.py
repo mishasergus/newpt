@@ -8,6 +8,8 @@ import random
 import math
 
 class Ball:
+    current_id = 0
+
     def __init__(self,canvas, x, y, v_x, v_y,radius = 20, colour = 'red'):
         self.canvas = canvas
         self.radius = radius
@@ -18,12 +20,22 @@ class Ball:
         self.v_y = v_y
         self.active = True
 
+        self.id = Ball.current_id
+        Ball.current_id += 1
+
         self.inf = [0,1]
 
         self.ball_id = self.canvas.create_oval(
             x - radius, y - radius,
             x + radius, y + radius,
             fill = colour,outline = 'black'
+        )
+
+        self.text_id = self.canvas.create_text(
+            x, y,
+            text = str(self.id),
+            fill='white',
+            font=("Arial Black", 12)
         )
 
     def move(self):
@@ -39,6 +51,8 @@ class Ball:
         self.canvas.coords(self.ball_id,
                            self.x - self.radius, self.y - self.radius,
                            self.x + self.radius, self.y + self.radius)
+        self.canvas.coords(self.text_id,
+                           self.x, self.y)
 
     def wall_collision_check(self):
         width = self.canvas.winfo_width()
@@ -81,20 +95,36 @@ class TableApp:
         self.root.title("BILIARD")
         self.scoreN = 0
 
-        self.score = tk.Label(root, text = f"Score: {self.scoreN}", font=("Arial Black", 20))
-        self.score.pack(pady = 5)
+        self.main_frame = tk.Frame(root)
+        self.main_frame.pack(side = tk.LEFT)
 
-        self.getter = tk.Entry(root, width=50)
-        self.getter.pack(pady = 5)
-
-        self.text_is_exist = tk.Label(root, text=f"Is exist: ", font=("Arial Black", 10))
-        self.text_is_exist.pack(pady = 5)
-
-        self.text_num_of_collisions = tk.Label(root, text=f"Collisions: ", font=("Arial Black", 10))
-        self.text_num_of_collisions.pack(pady = 5)
-
-        self.canvas = tk.Canvas(root, width = 800, height = 400, bg = "green",highlightthickness=3,highlightbackground="black")
+        self.canvas = tk.Canvas(self.main_frame, width = 800, height = 400, bg = "green",highlightthickness=3,highlightbackground="black")
         self.canvas.pack()
+
+        self.inf_frame = tk.Frame(root)
+        self.inf_frame.pack(side = tk.RIGHT, fill = tk.Y)
+
+        self.score = tk.Label(self.inf_frame, text=f"Score: {self.scoreN}", font=("Arial Black", 20))
+        self.score.pack(pady=5)
+
+        self.getter = tk.Entry(self.inf_frame, width=50)
+        self.getter.pack(pady=5)
+
+        self.text_is_exist = tk.Label(self.inf_frame, text=f"Is exist: ", font=("Arial Black", 10))
+        self.text_is_exist.pack(pady=5)
+
+        self.text_num_of_collisions = tk.Label(self.inf_frame, text=f"Collisions: ", font=("Arial Black", 10))
+        self.text_num_of_collisions.pack(pady=5)
+
+        self.scrollbar = tk.Scrollbar(self.inf_frame)
+        self.scrollbar.pack(side = tk.RIGHT, fill = tk.Y)
+
+        self.inf_text = tk.Text(self.inf_frame,width=15,yscrollcommand=self.scrollbar.set)
+        self.inf_text.pack(side=tk.LEFT, fill=tk.BOTH,expand = True)
+        self.scrollbar.config(command=self.inf_text.yview)
+
+        self.clear_button = tk.Button(self.inf_frame,text = "Clear", command=self.clear_info)
+        self.clear_button.pack(pady = 10)
 
         self.pockets = []
         self.balls = []
@@ -165,6 +195,24 @@ class TableApp:
                 return True
         return False
 
+    def inf_update(self):
+        yview = self.inf_text.yview()
+
+        self.inf_text.delete(1.0, tk.END)
+
+        for ball in self.balls:
+            inf = f"Id: {ball.id}:\n"
+            inf += f"Collisions: {ball.inf[0]}:\n"
+            inf += f"Is alive: {ball.inf[1]}:\n"
+
+            self.inf_text.insert(tk.END,inf)
+
+        self.inf_text.yview_moveto(yview[0])
+
+    def clear_info(self):
+        for ball in self.balls:
+            ball.inf[0] = 0
+        self.inf_update()
     def ball_move(self):
         index = 0
         try:
@@ -188,8 +236,10 @@ class TableApp:
         for ball in self.balls:
             if ball.active and self.check_pockets(ball):
                 self.canvas.delete(ball.ball_id)
+                self.canvas.delete(ball.text_id)
                 ball.active = False
                 ball.inf[1] = 0
+        self.inf_update()
         self.root.after(30, self.ball_move)
 
 
