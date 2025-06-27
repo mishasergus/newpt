@@ -143,6 +143,7 @@ class TableApp:
         width = int(self.canvas['width'])
         height = int(self.canvas['height'])
 
+
         par = [
             (0,0,30),
             (width // 2, -10, 30),
