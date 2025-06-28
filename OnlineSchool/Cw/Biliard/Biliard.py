@@ -44,8 +44,8 @@ class Ball:
         self.x += self.v_x * 1
         self.y += self.v_y * 1
 
-        self.v_x -= self.v_x * 0.02
-        self.v_y -= self.v_y * 0.02
+        self.v_x *= 0.98
+        self.v_y *= 0.98
 
         self.wall_collision_check()
         self.canvas.coords(self.ball_id,
