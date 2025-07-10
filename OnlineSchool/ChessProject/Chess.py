@@ -46,7 +46,7 @@ class Chess:#клас гри
         self.root = root#сам ткшний рут
         self.root.title("Chess")#заголовок
 
-        self.canvas = tk.Canvas(root, width=800, height=800, bg="#F5DEB3", highlightthickness=3,
+        self.canvas = tk.Canvas(root, width=600, height=600, bg="#F5DEB3", highlightthickness=3,
                                 highlightbackground="black")#Той самий легендарний канвас(леонардо малював монолізу тут)
         self.canvas.pack()#Розпаковую його в рут
 
