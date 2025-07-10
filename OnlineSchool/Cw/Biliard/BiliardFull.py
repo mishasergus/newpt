@@ -1,9 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL.ImageOps import expand
-from matplotlib.animation import FuncAnimation
 import tkinter as tk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import random
 import math
 
