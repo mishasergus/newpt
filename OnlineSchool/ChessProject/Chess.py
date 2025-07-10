@@ -53,7 +53,7 @@ class Chess:#клас гри
         self.canvas.pack()#Розпаковую його в рут
 
         self.draw_board()#малюю чорні клітинки
-        self.draw_figures()
+        self.draw_figures()#фігури
 
     def draw_board(self):
         cell_size_x = int(self.canvas['width']) / 8#розраховую розмір клітинки
@@ -76,17 +76,23 @@ class Chess:#клас гри
                         fill = '#8B4513'
                     )
     def draw_figures(self):
-        #black Rook
-        #black Bishop
-        #black Knight
-        #black Queen
-        #black King
-        #black Knight
-        #black Bishop
-        #black Rook
-        for i in range(8):
+        # black Bishop
+        # black Knight
+        # black Queen
+        # black King
+        # black Knight
+        # black Bishop
+        # black Rook
+        for i in range(8):#Pawns
             self.board[1][i] = Pawn(self.canvas, self, 'black',6,Figure.list_of_x_coords[i])
             self.board[7][i] = Pawn(self.canvas, self, 'white', 1, Figure.list_of_x_coords[i])
+        # white Bishop
+        # white Knight
+        # white Queen
+        # white King
+        # white Knight
+        # white Bishop
+        # white Rook
 
 if __name__ == "__main__":#якщо цей проект буде бібліотекою то все що нище не запуститься
     root = tk.Tk()#створюю вікно в тк
