@@ -49,7 +49,19 @@ class Chess:#клас гри
         self.root = root#сам ткшний рут
         self.root.title("Chess")#заголовок
 
-        self.board = [[None for _ in range(8)] for _ in range(8)]
+        self.board = [[None for _ in range(8)] for _ in range(8)]#Створюємо дошку та зповнюємо нанами
+        # !!!!ВАЖЛИВО!!!! ЯКЩО ВИВЕСТИ ДОШКУ ТО ВОНА БУДЕ ПЕРЕВЕРНУТА ТИПУ
+        # W - white
+        # B - black
+        # W W W W W W W W
+        # W W W W W W W W
+        #
+        #
+        #
+        #
+        # B B B B B B B B
+        # B B B B B B B B
+
 
         self.canvas = tk.Canvas(root, width=640, height=640, bg="#F5DEB3", highlightthickness=3,
                                 highlightbackground="black")#Той самий легендарний канвас(леонардо малював монолізу тут)
@@ -58,10 +70,10 @@ class Chess:#клас гри
         self.draw_board()#малюю чорні клітинки
         self.draw_figures()#фігури
 
-        self.white_moving = True
-        self.first_click = None
+        self.white_moving = True # Змінна черги
+        self.first_click = None #Перший клік який повинен вибрати фігуру
 
-        self.canvas.bind("<Button-1>", self.click)
+        self.canvas.bind("<Button-1>", self.click) # При натисканні лівої кнопки буде виклик self.click
 
     def draw_board(self):
         cell_size_x = float(self.canvas['width']) / 8#розраховую розмір клітинки
@@ -82,7 +94,7 @@ class Chess:#клас гри
                         x2,
                         y2,
                         fill = '#8B4513',
-                        outline=""
+                        outline=""# прибираю чорну обводку квадратів
                     )
     def draw_figures(self):
         # black Bishop
@@ -93,7 +105,7 @@ class Chess:#клас гри
         # black Bishop
         # black Rook
         for i in range(8):#Pawns
-            self.board[6][i] = Pawn(self.canvas, self, 'black',6,Figure.list_of_x_coords[i])
+            self.board[6][i] = Pawn(self.canvas, self, 'black',6,Figure.list_of_x_coords[i])#створюю пішаків
             self.board[1][i] = Pawn(self.canvas, self, 'white', 1, Figure.list_of_x_coords[i])
         # white Bishop
         # white Knight
@@ -104,23 +116,23 @@ class Chess:#клас гри
         # white Rook
 
     def click(self,event):
-        if self.first_click is None:
+        if self.first_click is None:# Перевірка чи є клік (першим) якщо не вибрана ніяка фігура
             cell_size_x = float(self.canvas['width']) / 8  # розраховую розмір клітинки
             cell_size_y = float(self.canvas['height']) / 8
 
 
-            col = int(event.x / cell_size_x)
-            row = 7 - int(event.y / cell_size_y)
-            self.first_click = (row, col)
-            if self.board[row][col] is not None:
-                on_cl = self.board[row][col]
+            col = int(event.x / cell_size_x)#Рахую номер колонки
+            row = 7 - int(event.y / cell_size_y)#Рахую номен рядка
+            self.first_click = (row, col)# задаю у змінну коорд на дошці щоб потім ми знали з якою фігурою взаємодіємо
+            if self.board[row][col] is not None:# перевіряю чи є на клітинці фігура
+                on_cl = self.board[row][col]# щоб не звертатися до дошки роблю змінну
                 if ((self.white_moving and on_cl.color == 'white') or
-                    (not self.white_moving and on_cl.color == 'black')):
-                    on_cl.is_active = True
+                    (not self.white_moving and on_cl.color == 'black')):#білі взаємодіють з білими а чорні з чорними
+                    on_cl.is_active = True# роблю фігуру активною
                 else:
-                    self.first_click = None
+                    self.first_click = None#не вийде вибрати інший колір
             else:
-                self.first_click = None
+                self.first_click = None#не вийде походити пустотою
 
 if __name__ == "__main__":#якщо цей проект буде бібліотекою то все що нище не запуститься
     root = tk.Tk()#створюю вікно в тк
