@@ -55,16 +55,19 @@ class Pawn(Figure):
 
     def show_variants(self):
         self.points = []
+        self.variants = []
         for i in range(1,3):
             if self.y_cord < 7:
                 if i == 1:
-                    if self.game.board[self.y_cord + 1][self.x_cord] is None:
+                    if self.game.board[self.y_cord + i][self.x_cord] is None:
                         self.points.append(self.canvas.create_oval(
                             self.center_x - 5, self.center_y - 5 - self.game.cell_height * i,
                             self.center_x + 5, self.center_y + 5 - self.game.cell_height * i,
                             fill="gray",
                             outline=""  # прибираю чорну обводку
                         ))
+                    else:
+                        break
                 elif not self.have_ever_moved:
                     if self.game.board[self.y_cord + i][self.x_cord] is None:
                         self.points.append(self.canvas.create_oval(
@@ -73,6 +76,8 @@ class Pawn(Figure):
                             fill="gray",
                             outline=""  # прибираю чорну обводку
                         ))
+                    else:
+                        break
                 else:
                     break
                 self.variants.append([self.y_cord + i, self.x_cord])
@@ -235,8 +240,16 @@ class Chess:#клас гри
                         self.canvas.delete(self.board[row][col].figure_id)
                     self.board[row][col] = on_cl
                     self.board[row][col].move(row, col)
-            on_cl.delete_variants()
-            self.board[self.first_click[0]][self.first_click[1]] = None
+                    on_cl.delete_variants()
+                    self.board[self.first_click[0]][self.first_click[1]] = None
+                    self.first_click = None
+                    break
+
+                self.second_click = None
+            try:
+                on_cl.delete_variants()
+            except:
+                pass
             self.first_click = None
 
 if __name__ == "__main__":#якщо цей проект буде бібліотекою то все що нище не запуститься
