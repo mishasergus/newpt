@@ -17,6 +17,7 @@ class Figure: #Створюю матер клас фігури
         self.is_alive = is_alive
         self.is_active = is_active
 
+        self.x_letter = x_letter
         self.y_cord = y_cord
         self.x_cord = Figure.list_of_x_coords.index(x_letter)#тут я беру букву та конвертую в індекс
 
@@ -39,11 +40,14 @@ class Figure: #Створюю матер клас фігури
 
     def delete_variants(self):
         pass
-    #self.canvas.delete(self.points[0])
+
+    def move(self):
+        pass
 
 class Pawn(Figure):
     def __init__(self, canvas, game_ref, color, y_cord, x_letter, is_alive = True, is_active = False, have_ever_moved = False):
         super().__init__(canvas, game_ref, color, y_cord, x_letter, is_alive, is_active)#конструктор успадкування
+        self.game_ref = game_ref
         self.canvas.itemconfig(self.figure_id, text="♙")# тут ми візуалізуємо ппішака типу в нього тепер є текст
         self.have_ever_moved = have_ever_moved#Типу це спец штука для пішака бо пішак спочатку може ходити на 2 вперед замість 1
         self.variants = []
@@ -52,33 +56,37 @@ class Pawn(Figure):
     def show_variants(self):
         self.points = []
         for i in range(1,3):
-            if self.y_cord < 7 and self.game.board[self.y_cord + i][self.x_cord] is None and i == 1:
-                self.points.append(self.canvas.create_oval(
-                    self.center_x - 5, self.center_y - 5 - self.game.cell_height * i,
-                    self.center_x + 5, self.center_y + 5 - self.game.cell_height * i,
-                    fill="gray",
-                    outline=""  # прибираю чорну обводку
-                ))
-            elif not self.have_ever_moved and self.game.board[self.y_cord + i][self.x_cord] is None:
-                self.points.append(self.canvas.create_oval(
-                    self.center_x - 5, self.center_y - 5 - self.game.cell_height * 2,
-                    self.center_x + 5, self.center_y + 5 - self.game.cell_height * 2,
-                    fill="gray",
-                    outline=""  # прибираю чорну обводку
-                ))
-            else:
-                break
-            self.variants.append([self.y_cord + i, self.x_cord])
+            if self.y_cord < 7:
+                if i == 1:
+                    if self.game.board[self.y_cord + 1][self.x_cord] is None:
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5, self.center_y - 5 - self.game.cell_height * i,
+                            self.center_x + 5, self.center_y + 5 - self.game.cell_height * i,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                elif not self.have_ever_moved:
+                    if self.game.board[self.y_cord + i][self.x_cord] is None:
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5, self.center_y - 5 - self.game.cell_height * 2,
+                            self.center_x + 5, self.center_y + 5 - self.game.cell_height * 2,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                else:
+                    break
+                self.variants.append([self.y_cord + i, self.x_cord])
         if (self.y_cord < 7 and self.x_cord != 0):
             obj = self.game.board[self.y_cord + 1][self.x_cord - 1]
             if (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                     (obj.color == 'white' and not self.game.white_moving))):
                 self.points.append(self.canvas.create_oval(
-                    self.center_x - 5 - self.game.cell_width, self.center_y - 5 - self.game.cell_height,
-                    self.center_x + 5 - self.game.cell_width, self.center_y + 5 - self.game.cell_height,
-                    fill="gray",
-                    outline=""  # прибираю чорну обводку
+                    self.center_x - 15 - self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                    self.center_x + 15 - self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                    fill="",
+                    outline="gray",  # прибираю чорну обводку
+                    width=6
                 ))
                 self.variants.append([self.y_cord + 1, self.x_cord - 1])
         if (self.y_cord < 7 and self.x_cord != 7):
@@ -87,13 +95,44 @@ class Pawn(Figure):
                 ((obj.color == 'black' and self.game.white_moving) or
                 (obj.color == 'white' and not self.game.white_moving))):
                 self.points.append(self.canvas.create_oval(
-                    self.center_x - 5 + self.game.cell_width, self.center_y - 5 - self.game.cell_height,
-                    self.center_x + 5 + self.game.cell_width, self.center_y + 5 - self.game.cell_height,
-                    fill="gray",
-                    outline=""  # прибираю чорну обводку
+                    self.center_x - 15 + self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                    self.center_x + 15 + self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                    fill="",
+                    outline="gray",  # прибираю чорну обводку
+                    width=6
                 ))
                 self.variants.append([self.y_cord + 1, self.x_cord + 1])
         print(self.variants)
+
+    def move(self, y_cord, x_cord):
+
+        self.y_cord = y_cord
+        self.x_letter = Figure.list_of_x_coords[x_cord]
+        self.x_cord = x_cord
+
+        self.center_x = self.x_cord * self.game.cell_width + self.game.cell_width / 2
+        # Координати канваса починаються з лівого верхнього кута
+        # ми спочатку розраховуємо довж 1 кліт потім множимо на інд кліт а потім від шир канв відн
+        # значення та ще половину кліт щоб текст був посередині
+        self.center_y = (float(self.canvas['height']) - self.game.cell_height * self.y_cord) - (
+                    self.game.cell_height / 2)
+
+        self.canvas.delete(self.figure_id)
+
+        self.figure_id = self.canvas.create_text(  # ця шняга малює на канвасі текст покищо тексту нема бо це конст
+            self.center_x,
+            self.center_y,
+            text="♙",
+            fill=self.color,
+            font=("Arial Black", 35)
+        )
+
+        self.have_ever_moved = True
+
+    def delete_variants(self):
+        for i in range(len(self.points)):
+            self.canvas.delete(self.points[i])
+        self.points.clear()
 
 class Chess:#клас гри
 
@@ -125,7 +164,9 @@ class Chess:#клас гри
         self.draw_figures()#фігури
 
         self.white_moving = True # Змінна черги
-        self.first_click = None #Перший клік який повинен вибрати фігуру
+
+        self.first_click = None # Перший клік який повинен вибрати фігуру
+        self.second_click = None  #
 
         self.canvas.bind("<Button-1>", self.click) # При натисканні лівої кнопки буде виклик self.click
 
@@ -157,8 +198,7 @@ class Chess:#клас гри
         # black Bishop
         # black Rook
         for i in range(8):#Pawns
-            x = random.randint(2,5)
-            self.board[x][i] = Pawn(self.canvas, self, 'black',x,Figure.list_of_x_coords[i])#створюю пішаків
+            self.board[6][i] = Pawn(self.canvas, self, 'black',6,Figure.list_of_x_coords[i])#створюю пішаків
             self.board[1][i] = Pawn(self.canvas, self, 'white', 1, Figure.list_of_x_coords[i])
         # white Bishop
         # white Knight
@@ -185,6 +225,18 @@ class Chess:#клас гри
                 self.first_click = None#не вийде походити пустотою
         else:
             on_cl = self.board[self.first_click[0]][self.first_click[1]]
+            row = 7 - int(event.y / self.cell_height)  # Рахую номен рядка
+            col = int(event.x / self.cell_width)  # Рахую номер колонки
+            for i in range(len(on_cl.variants)):
+                self.second_click = [row, col]
+                if self.second_click == on_cl.variants[i]:
+                    print(self.second_click)
+                    if self.board[row][col] is not None:
+                        self.canvas.delete(self.board[row][col].figure_id)
+                    self.board[row][col] = on_cl
+                    self.board[row][col].move(row, col)
+            on_cl.delete_variants()
+            self.board[self.first_click[0]][self.first_click[1]] = None
             self.first_click = None
 
 if __name__ == "__main__":#якщо цей проект буде бібліотекою то все що нище не запуститься
