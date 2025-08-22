@@ -94,6 +94,17 @@ class Pawn(Figure):
                     width=6
                 ))
                 self.variants.append([self.y_cord + 1, self.x_cord - 1])
+            if self.game_ref.en_passant_target is not None:
+                if (self.y_cord + 1 == self.game_ref.en_passant_target[0] and
+                        self.x_cord - 1 == self.game_ref.en_passant_target[1]):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15 - self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                        self.center_x + 15 - self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord + 1, self.x_cord - 1,True])
         if (self.y_cord < 7 and self.x_cord != 7):
             obj = self.game.board[self.y_cord + 1][self.x_cord + 1]
             if (obj is not None and
@@ -107,9 +118,26 @@ class Pawn(Figure):
                     width=6
                 ))
                 self.variants.append([self.y_cord + 1, self.x_cord + 1])
+            if self.game_ref.en_passant_target is not None:
+                if (self.y_cord + 1 == self.game_ref.en_passant_target[0] and
+                        self.x_cord + 1 == self.game_ref.en_passant_target[1]):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15 + self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                        self.center_x + 15 + self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord + 1, self.x_cord + 1,True])
         print(self.variants)
 
     def move(self, y_cord, x_cord, game_rev = False):
+        if abs(y_cord - self.y_cord) == 2 and not game_rev:
+            self.game_ref.en_passant_target = (8 - y_cord, 7 - x_cord)
+        elif not game_rev:
+            self.game_ref.en_passant_target = None
+        if not game_rev:
+            print(self.game_ref.en_passant_target,"------------TARGET-----------")
 
         self.y_cord = y_cord
         self.x_letter = Figure.list_of_x_coords[x_cord]
@@ -169,6 +197,7 @@ class Chess:#клас гри
         self.draw_figures()#фігури
 
         self.white_moving = True # Змінна черги
+        self.en_passant_target = None
 
         self.first_click = None # Перший клік який повинен вибрати фігуру
         self.second_click = None  #
@@ -234,10 +263,14 @@ class Chess:#клас гри
             col = int(event.x / self.cell_width)  # Рахую номер колонки
             self.second_click = [row, col]
             for i in range(len(on_cl.variants)):
-                if self.second_click == on_cl.variants[i]:
+                if (self.second_click[0] == on_cl.variants[i][0] and
+                    self.second_click[1] == on_cl.variants[i][1]):
                     print(self.second_click)
                     if self.board[row][col] is not None:
                         self.canvas.delete(self.board[row][col].figure_id)
+                    if self.board[row][col] is None and len(on_cl.variants[i]) == 3 and self.board[row-1][col] is not None:
+                            self.canvas.delete(self.board[row-1][col].figure_id)
+                            self.board[row - 1][col] = None
                     self.board[row][col] = on_cl
                     self.board[row][col].move(row, col)
                     on_cl.delete_variants()
