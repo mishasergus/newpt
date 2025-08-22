@@ -109,7 +109,7 @@ class Pawn(Figure):
                 self.variants.append([self.y_cord + 1, self.x_cord + 1])
         print(self.variants)
 
-    def move(self, y_cord, x_cord):
+    def move(self, y_cord, x_cord, game_rev = False):
 
         self.y_cord = y_cord
         self.x_letter = Figure.list_of_x_coords[x_cord]
@@ -131,8 +131,8 @@ class Pawn(Figure):
             fill=self.color,
             font=("Arial Black", 35)
         )
-
-        self.have_ever_moved = True
+        if not game_rev:
+            self.have_ever_moved = True
 
     def delete_variants(self):
         for i in range(len(self.points)):
@@ -145,7 +145,7 @@ class Chess:#клас гри
         self.root = root#сам ткшний рут
         self.root.title("Chess")#заголовок
 
-        self.board = [[None for _ in range(8)] for _ in range(8)]#Створюємо дошку та зповнюємо нанами
+        self.board = [[None for i in range(8)] for i in range(8)]#Створюємо дошку та зповнюємо нанами
         # !!!!ВАЖЛИВО!!!! ЯКЩО ВИВЕСТИ ДОШКУ ТО ВОНА БУДЕ ПЕРЕВЕРНУТА ТИПУ
         # W - white
         # B - black
@@ -232,8 +232,8 @@ class Chess:#клас гри
             on_cl = self.board[self.first_click[0]][self.first_click[1]]
             row = 7 - int(event.y / self.cell_height)  # Рахую номен рядка
             col = int(event.x / self.cell_width)  # Рахую номер колонки
+            self.second_click = [row, col]
             for i in range(len(on_cl.variants)):
-                self.second_click = [row, col]
                 if self.second_click == on_cl.variants[i]:
                     print(self.second_click)
                     if self.board[row][col] is not None:
@@ -243,9 +243,20 @@ class Chess:#клас гри
                     on_cl.delete_variants()
                     self.board[self.first_click[0]][self.first_click[1]] = None
                     self.first_click = None
+                    for h in range(8):
+                        for j in range(8):
+                            if self.board[h][j] is not None:
+                                self.board[h][j].move(7-self.board[h][j].y_cord,7-self.board[h][j].x_cord,True)
+                    self.white_moving = not self.white_moving
+                    board_copy = [[self.board[7 - k][7 - g] for g in range(8)] for k in range(8)]
+                    print(self.board)
+                    self.board = board_copy
+                    print(board_copy)
+                    self.board = [[board_copy[k][g] for g in range(8)] for k in range(8)]
                     break
 
-                self.second_click = None
+
+            self.second_click = None
             try:
                 on_cl.delete_variants()
             except:
