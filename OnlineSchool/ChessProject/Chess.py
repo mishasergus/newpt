@@ -167,6 +167,159 @@ class Pawn(Figure):
             self.canvas.delete(self.points[i])
         self.points.clear()
 
+class Rook(Figure):
+    def __init__(self, canvas, game_ref, color, y_cord, x_letter, is_alive = True, is_active = False, have_ever_moved = False):
+        super().__init__(canvas, game_ref, color, y_cord, x_letter, is_alive, is_active)#конструктор успадкування
+        self.game_ref = game_ref
+        self.canvas.itemconfig(self.figure_id, text="♖")# тут ми візуалізуємо ппішака типу в нього тепер є текст
+        self.have_ever_moved = have_ever_moved#Типу це спец штука для рокіровки
+        self.variants = []
+        self.points = []
+
+    def show_variants(self):
+        self.points = []
+        self.variants = []
+        for i in range(1, 7):
+            if self.y_cord + i < 8:
+                obj = self.game.board[self.y_cord + i][self.x_cord]
+                if obj is None:
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 5, self.center_y - 5 - self.game.cell_height * i,
+                        self.center_x + 5, self.center_y + 5 - self.game.cell_height * i,
+                        fill="gray",
+                        outline=""  # прибираю чорну обводку
+                    ))
+                elif (obj is not None and
+                        ((obj.color == 'black' and self.game.white_moving) or
+                         (obj.color == 'white' and not self.game.white_moving))):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15, self.center_y - 15 - self.game.cell_height * i,
+                        self.center_x + 15, self.center_y + 15 - self.game.cell_height * i,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord + i, self.x_cord])
+                    break
+                else:
+                    print("sssssssssss")
+                    break
+                self.variants.append([self.y_cord + i, self.x_cord])
+            else:
+                break
+        for i in range(1, 7):
+            if self.y_cord - i >= 0:
+                obj = self.game.board[self.y_cord - i][self.x_cord]
+                if obj is None:
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 5, self.center_y - 5 + self.game.cell_height * i,
+                        self.center_x + 5, self.center_y + 5 + self.game.cell_height * i,
+                        fill="gray",
+                        outline=""  # прибираю чорну обводку
+                    ))
+                elif (obj is not None and
+                        ((obj.color == 'black' and self.game.white_moving) or
+                         (obj.color == 'white' and not self.game.white_moving))):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15, self.center_y - 15 + self.game.cell_height * i,
+                        self.center_x + 15, self.center_y + 15 + self.game.cell_height * i,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord - i, self.x_cord])
+                    break
+                else:
+                    break
+                self.variants.append([self.y_cord - i, self.x_cord])
+            else:
+                break
+        for i in range(1, 7):
+            if self.x_cord + i < 8:
+                obj = self.game.board[self.y_cord][self.x_cord + i]
+                if obj is None:
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 5 + self.game.cell_width * i, self.center_y - 5,
+                        self.center_x + 5 + self.game.cell_width * i, self.center_y + 5,
+                        fill="gray",
+                        outline=""  # прибираю чорну обводку
+                    ))
+                elif (obj is not None and
+                        ((obj.color == 'black' and self.game.white_moving) or
+                         (obj.color == 'white' and not self.game.white_moving))):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15 + self.game.cell_width * i, self.center_y - 15,
+                        self.center_x + 15 + self.game.cell_width * i, self.center_y + 15,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord, self.x_cord + i])
+                    break
+                else:
+                    break
+                self.variants.append([self.y_cord, self.x_cord + i])
+            else:
+                break
+        for i in range(1, 7):
+            if self.x_cord - i >= 0:
+                obj = self.game.board[self.y_cord][self.x_cord - i]
+                if obj is None:
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 5 - self.game.cell_width * i, self.center_y - 5,
+                        self.center_x + 5 - self.game.cell_width * i, self.center_y + 5,
+                        fill="gray",
+                        outline=""  # прибираю чорну обводку
+                    ))
+                elif (obj is not None and
+                        ((obj.color == 'black' and self.game.white_moving) or
+                         (obj.color == 'white' and not self.game.white_moving))):
+                    self.points.append(self.canvas.create_oval(
+                        self.center_x - 15 - self.game.cell_width * i, self.center_y - 15,
+                        self.center_x + 15 - self.game.cell_width * i, self.center_y + 15,
+                        fill="",
+                        outline="gray",  # прибираю чорну обводку
+                        width=6
+                    ))
+                    self.variants.append([self.y_cord, self.x_cord - i])
+                    break
+                else:
+                    break
+                self.variants.append([self.y_cord, self.x_cord - i])
+            else:
+                break
+        print(self.variants)
+
+    def move(self, y_cord, x_cord, game_rev = False):
+
+        self.y_cord = y_cord
+        self.x_letter = Figure.list_of_x_coords[x_cord]
+        self.x_cord = x_cord
+
+        self.center_x = self.x_cord * self.game.cell_width + self.game.cell_width / 2
+        # Координати канваса починаються з лівого верхнього кута
+        # ми спочатку розраховуємо довж 1 кліт потім множимо на інд кліт а потім від шир канв відн
+        # значення та ще половину кліт щоб текст був посередині
+        self.center_y = (float(self.canvas['height']) - self.game.cell_height * self.y_cord) - (
+                    self.game.cell_height / 2)
+
+        self.canvas.delete(self.figure_id)
+
+        self.figure_id = self.canvas.create_text(  # ця шняга малює на канвасі текст покищо тексту нема бо це конст
+            self.center_x,
+            self.center_y,
+            text="♖",
+            fill=self.color,
+            font=("Arial Black", 35)
+        )
+        if not game_rev:
+            self.have_ever_moved = True
+
+    def delete_variants(self):
+        for i in range(len(self.points)):
+            self.canvas.delete(self.points[i])
+        self.points.clear()
+
 class Chess:#клас гри
 
     def __init__(self,root):
@@ -230,7 +383,8 @@ class Chess:#клас гри
         # black King
         # black Knight
         # black Bishop
-        # black Rook
+        self.board[7][0] = Rook(self.canvas, self, 'black', 7, Figure.list_of_x_coords[0])# black Rook
+        self.board[7][7] = Rook(self.canvas, self, 'black', 7, Figure.list_of_x_coords[7])  # black Rook
         for i in range(8):#Pawns
             self.board[6][i] = Pawn(self.canvas, self, 'black',6,Figure.list_of_x_coords[i])#створюю пішаків
             self.board[1][i] = Pawn(self.canvas, self, 'white', 1, Figure.list_of_x_coords[i])
@@ -240,7 +394,8 @@ class Chess:#клас гри
         # white King
         # white Knight
         # white Bishop
-        # white Rook
+        self.board[0][0] = Rook(self.canvas, self, 'white', 0, Figure.list_of_x_coords[0])  # white Rook
+        self.board[0][7] = Rook(self.canvas, self, 'white', 0, Figure.list_of_x_coords[7])  # white Rook
 
     def click(self,event):
         if self.first_click is None:# Перевірка чи є клік (першим) якщо не вибрана ніяка фігура
