@@ -1183,24 +1183,24 @@ class Chess:#клас гри
 
         for i in range(8):
             for j in range(8):
-                figure = board_copy[i][j]
-                if figure is not None and figure.color == attacker_color:
+                obj = board_copy[i][j]
+                if obj is not None and obj.color == attacker_color:
                     # Генерую варіанти ходів для кожної фігури
                     # та перевіряю, чи атакують вони клітинку
-                    if isinstance(figure, Pawn):
+                    if isinstance(obj, Pawn):
                         # Спеціальна логіка для пішака
-                        if figure.color == 'white':
+                        if obj.color == 'white':
                             if y == i + 1 and abs(x - j) == 1:
                                 return True
                         else:  # black pawn
                             if y == i - 1 and abs(x - j) == 1:
                                 return True
                     else:
-                        figure.show_variants(True)
-                        if [y, x] in figure.variants:
-                            figure.delete_variants()
+                        obj.show_variants(True)
+                        if [y, x] in obj.variants:
+                            obj.delete_variants()
                             return True
-                        figure.delete_variants()
+                        obj.delete_variants()
 
         return False
 
