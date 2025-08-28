@@ -880,191 +880,272 @@ class King(Figure):
     def show_variants(self, checker = False):
         self.points = []
         self.variants = []
-        if self.y_cord + 1 < 8 and not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord):
+        if self.y_cord + 1 < 8:
             obj = self.game.board[self.y_cord + 1][self.x_cord]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5, self.center_y - 5 - self.game.cell_height,
-                        self.center_x + 5, self.center_y + 5 - self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord])
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5, self.center_y - 5 - self.game.cell_height,
+                            self.center_x + 5, self.center_y + 5 - self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord):
+                        self.variants.append([self.y_cord + 1, self.x_cord])
+
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15, self.center_y - 15 - self.game.cell_height,
-                        self.center_x + 15, self.center_y + 15 - self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord])
-        if self.y_cord - 1 >= 0 and not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord):
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15, self.center_y - 15 - self.game.cell_height,
+                            self.center_x + 15, self.center_y + 15 - self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord):
+                        self.variants.append([self.y_cord + 1, self.x_cord])
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord])
+        if self.y_cord - 1 >= 0:
             obj = self.game.board[self.y_cord - 1][self.x_cord]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5, self.center_y - 5 + self.game.cell_height,
-                        self.center_x + 5, self.center_y + 5 + self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord])
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5, self.center_y - 5 + self.game.cell_height,
+                            self.center_x + 5, self.center_y + 5 + self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord):
+                        self.variants.append([self.y_cord - 1, self.x_cord])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15, self.center_y - 15 + self.game.cell_height,
-                        self.center_x + 15, self.center_y + 15 + self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord])
-        if self.x_cord + 1 < 8 and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15, self.center_y - 15 + self.game.cell_height,
+                            self.center_x + 15, self.center_y + 15 + self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord):
+                        self.variants.append([self.y_cord - 1, self.x_cord])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord])
+        if self.x_cord + 1 < 8:
             obj = self.game.board[self.y_cord][self.x_cord + 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 + self.game.cell_width, self.center_y - 5,
-                        self.center_x + 5 + self.game.cell_width, self.center_y + 5,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord, self.x_cord + 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 + self.game.cell_width, self.center_y - 5,
+                            self.center_x + 5 + self.game.cell_width, self.center_y + 5,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1):
+                        self.variants.append([self.y_cord, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord, self.x_cord + 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 + self.game.cell_width, self.center_y - 15,
-                        self.center_x + 15 + self.game.cell_width, self.center_y + 15,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord, self.x_cord + 1])
-        if self.x_cord - 1 >= 0 and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 + self.game.cell_width, self.center_y - 15,
+                            self.center_x + 15 + self.game.cell_width, self.center_y + 15,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1):
+                        self.variants.append([self.y_cord, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord, self.x_cord + 1])
+        if self.x_cord - 1 >= 0:
             obj = self.game.board[self.y_cord][self.x_cord - 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 - self.game.cell_width, self.center_y - 5,
-                        self.center_x + 5 - self.game.cell_width, self.center_y + 5,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord, self.x_cord - 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 - self.game.cell_width, self.center_y - 5,
+                            self.center_x + 5 - self.game.cell_width, self.center_y + 5,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1):
+                        self.variants.append([self.y_cord, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord, self.x_cord - 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 - self.game.cell_width, self.center_y - 15,
-                        self.center_x + 15 - self.game.cell_width, self.center_y + 15,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord, self.x_cord - 1])
-        if self.y_cord + 1 < 8 and self.x_cord + 1 < 8 and not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord + 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 - self.game.cell_width, self.center_y - 15,
+                            self.center_x + 15 - self.game.cell_width, self.center_y + 15,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1):
+                        self.variants.append([self.y_cord, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord, self.x_cord - 1])
+        if self.y_cord + 1 < 8 and self.x_cord + 1 < 8:
             obj = self.game.board[self.y_cord + 1][self.x_cord + 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 + self.game.cell_width, self.center_y - 5 - self.game.cell_height,
-                        self.center_x + 5 + self.game.cell_width, self.center_y + 5 - self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord + 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 + self.game.cell_width, self.center_y - 5 - self.game.cell_height,
+                            self.center_x + 5 + self.game.cell_width, self.center_y + 5 - self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord + 1):
+                        self.variants.append([self.y_cord + 1, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord + 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 + self.game.cell_width, self.center_y - 15 - self.game.cell_height,
-                        self.center_x + 15 + self.game.cell_width, self.center_y + 15 - self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord + 1])
-        if self.y_cord - 1 >= 0 and self.x_cord + 1 < 8 and not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord + 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 + self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                            self.center_x + 15 + self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord + 1):
+                        self.variants.append([self.y_cord + 1, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord + 1])
+        if self.y_cord - 1 >= 0 and self.x_cord + 1 < 8:
             obj = self.game.board[self.y_cord - 1][self.x_cord + 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 + self.game.cell_width, self.center_y - 5 + self.game.cell_height,
-                        self.center_x + 5 + self.game.cell_width, self.center_y + 5 + self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord + 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 + self.game.cell_width, self.center_y - 5 + self.game.cell_height,
+                            self.center_x + 5 + self.game.cell_width, self.center_y + 5 + self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord + 1):
+                        self.variants.append([self.y_cord - 1, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord + 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 + self.game.cell_width, self.center_y - 15 + self.game.cell_height,
-                        self.center_x + 15 + self.game.cell_width, self.center_y + 15 + self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord + 1])
-        if self.y_cord + 1 < 8 and self.x_cord - 1 >= 0 and not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord - 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord + 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 + self.game.cell_width, self.center_y - 15 + self.game.cell_height,
+                            self.center_x + 15 + self.game.cell_width, self.center_y + 15 + self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord + 1):
+                        self.variants.append([self.y_cord - 1, self.x_cord + 1])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord + 1])
+        if self.y_cord + 1 < 8 and self.x_cord - 1 >= 0:
             obj = self.game.board[self.y_cord + 1][self.x_cord - 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 - self.game.cell_width, self.center_y - 5 - self.game.cell_height,
-                        self.center_x + 5 - self.game.cell_width, self.center_y + 5 - self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord - 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 - self.game.cell_width, self.center_y - 5 - self.game.cell_height,
+                            self.center_x + 5 - self.game.cell_width, self.center_y + 5 - self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord - 1):
+                        self.variants.append([self.y_cord + 1, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord - 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 - self.game.cell_width, self.center_y - 15 - self.game.cell_height,
-                        self.center_x + 15 - self.game.cell_width, self.center_y + 15 - self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord + 1, self.x_cord - 1])
-        if self.y_cord - 1 >= 0 and self.x_cord - 1 >= 0 and not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord - 1):
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 - self.game.cell_width, self.center_y - 15 - self.game.cell_height,
+                            self.center_x + 15 - self.game.cell_width, self.center_y + 15 - self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord + 1, self.x_cord - 1):
+                        self.variants.append([self.y_cord + 1, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord + 1, self.x_cord - 1])
+        if self.y_cord - 1 >= 0 and self.x_cord - 1 >= 0:
             obj = self.game.board[self.y_cord - 1][self.x_cord - 1]
             if obj is None:
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 5 - self.game.cell_width, self.center_y - 5 + self.game.cell_height,
-                        self.center_x + 5 - self.game.cell_width, self.center_y + 5 + self.game.cell_height,
-                        fill="gray",
-                        outline=""  # прибираю чорну обводку
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord - 1])
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 5 - self.game.cell_width, self.center_y - 5 + self.game.cell_height,
+                            self.center_x + 5 - self.game.cell_width, self.center_y + 5 + self.game.cell_height,
+                            fill="gray",
+                            outline=""  # прибираю чорну обводку
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord - 1):
+                        self.variants.append([self.y_cord - 1, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord - 1])
             elif (obj is not None and
                     ((obj.color == 'black' and self.game.white_moving) or
                      (obj.color == 'white' and not self.game.white_moving))):
                 if not checker:
-                    self.points.append(self.canvas.create_oval(
-                        self.center_x - 15 - self.game.cell_width, self.center_y - 15 + self.game.cell_height,
-                        self.center_x + 15 - self.game.cell_width, self.center_y + 15 + self.game.cell_height,
-                        fill="",
-                        outline="gray",  # прибираю чорну обводку
-                        width=6
-                    ))
-                self.variants.append([self.y_cord - 1, self.x_cord - 1])
-        print(self.variants)
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord - 1):
+                        self.points.append(self.canvas.create_oval(
+                            self.center_x - 15 - self.game.cell_width, self.center_y - 15 + self.game.cell_height,
+                            self.center_x + 15 - self.game.cell_width, self.center_y + 15 + self.game.cell_height,
+                            fill="",
+                            outline="gray",  # прибираю чорну обводку
+                            width=6
+                        ))
+                if not checker:
+                    if not self.game_ref.is_square_under_attack(self.y_cord - 1, self.x_cord - 1):
+                        self.variants.append([self.y_cord - 1, self.x_cord - 1])
+                else:
+                    self.variants.append([self.y_cord - 1, self.x_cord - 1])
+
 
     def move(self, y_cord, x_cord, game_rev = False):
 
@@ -1156,7 +1237,7 @@ class Chess:#клас гри
                     )
     def draw_figures(self):
         self.board[7][3] = Queen(self.canvas, self, 'black', 7, Figure.list_of_x_coords[3])# black Queen
-        # self.board[7][4] = King(self.canvas, self, 'black', 7, Figure.list_of_x_coords[4])# black King
+        self.board[7][4] = King(self.canvas, self, 'black', 7, Figure.list_of_x_coords[4])# black King
         self.board[7][1] = Knight(self.canvas, self, 'black', 7, Figure.list_of_x_coords[1])  # black Knight
         self.board[7][6] = Knight(self.canvas, self, 'black', 7, Figure.list_of_x_coords[6])  # black Knight
         self.board[7][2] = Bishop(self.canvas, self, 'black', 7, Figure.list_of_x_coords[2])  # black Bishop
@@ -1190,7 +1271,7 @@ class Chess:#клас гри
                     if isinstance(obj, Pawn):
                         # Спеціальна логіка для пішака
                         if obj.color == 'white':
-                            if y == i + 1 and abs(x - j) == 1:
+                            if y == i - 1 and abs(x - j) == 1:
                                 return True
                         else:  # black pawn
                             if y == i - 1 and abs(x - j) == 1:
