@@ -207,7 +207,10 @@ class Rook(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord])
             else:
                 break
@@ -236,7 +239,10 @@ class Rook(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord])
             else:
                 break
@@ -265,7 +271,10 @@ class Rook(Figure):
                     self.variants.append([self.y_cord, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord, self.x_cord + i])
             else:
                 break
@@ -294,7 +303,10 @@ class Rook(Figure):
                     self.variants.append([self.y_cord, self.x_cord - i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord, self.x_cord - i])
             else:
                 break
@@ -365,10 +377,12 @@ class Bishop(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord + i])
             else:
-                print(3)
                 break
         for i in range(1, 7):
             if self.y_cord - i >= 0 and self.x_cord + i < 8:
@@ -395,10 +409,12 @@ class Bishop(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord + i])
             else:
-                print(3)
                 break
         for i in range(1, 7):
             if self.y_cord + i < 8 and self.x_cord - i >= 0:
@@ -425,10 +441,12 @@ class Bishop(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord - i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord - i])
             else:
-                print(3)
                 break
         for i in range(1, 7):
             if self.y_cord - i >= 0 and self.x_cord - i >= 0:
@@ -454,8 +472,10 @@ class Bishop(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord - i])
                     break
                 else:
-                    print(3)
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord - i])
             else:
                 break
@@ -524,7 +544,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord])
             else:
                 break
@@ -553,7 +576,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord])
             else:
                 break
@@ -582,7 +608,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord, self.x_cord + i])
             else:
                 break
@@ -611,7 +640,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord, self.x_cord - i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord, self.x_cord - i])
             else:
                 break
@@ -640,7 +672,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord + i])
             else:
                 break
@@ -669,7 +704,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord + i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord + i])
             else:
                 break
@@ -698,7 +736,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord + i, self.x_cord - i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord + i, self.x_cord - i])
             else:
                 break
@@ -727,7 +768,10 @@ class Queen(Figure):
                     self.variants.append([self.y_cord - i, self.x_cord - i])
                     break
                 else:
-                    break
+                    if checker and not isinstance(obj, King):
+                        break
+                    elif not checker:
+                        break
                 self.variants.append([self.y_cord - i, self.x_cord - i])
             else:
                 break
