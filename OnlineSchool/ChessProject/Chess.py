@@ -163,6 +163,25 @@ class Pawn(Figure):
             fill=self.color,
             font=("Arial Black", 35)
         )
+        # if self.y_cord == 7:
+        #     choose1 = 0
+        #     while choose1 > 0 and choose1 < 5:
+        #         print("""
+        #         1-Knight
+        #         2-Bishop
+        #         3-Rook
+        #         4-Queen""")
+        #         choose1 = int(input(": "))
+        #     self.canvas.delete(self.figure_id)
+        #     if choose1 == 1:
+        #         self.game.board[y_cord][x_cord] = Knight(self.game.canvas, self.game, self.color, y_cord, Figure.list_of_x_coords[x_cord])
+        #     elif choose1 == 2:
+        #         self.game.board[y_cord][x_cord] = Bishop(self.game.canvas, self.game, self.color, y_cord, Figure.list_of_x_coords[x_cord])
+        #     elif choose1 == 3:
+        #         self.game.board[y_cord][x_cord] = Rook(self.game.canvas, self.game, self.color, y_cord, Figure.list_of_x_coords[x_cord],
+        #                                                have_ever_moved=True)
+        #     elif choose1 == 4:
+        #         self.game.board[y_cord][x_cord] = Queen(self.game.canvas, self.game, self.color, y_cord, Figure.list_of_x_coords[x_cord])
         if not game_rev:
             self.have_ever_moved = True
 
@@ -1376,6 +1395,26 @@ class Chess:#клас гри
                     self.board[row][col].move(row, col)
                     on_cl.delete_variants()
                     self.board[self.first_click[0]][self.first_click[1]] = None
+                    if isinstance(self.board[row][col], Pawn) and row == 7:
+                        choose1 = 0
+                        while choose1 < 1 or choose1 > 4:
+                            print("""
+                            1-Knight
+                            2-Bishop
+                            3-Rook
+                            4-Queen""")
+                            choose1 = int(input(": "))
+                        color = self.board[row][col].color
+                        self.canvas.delete(self.board[row][col].figure_id)
+                        if choose1 == 1:
+                            self.board[row][col] = Knight(self.canvas, self, color, row, Figure.list_of_x_coords[col])
+                        elif choose1 == 2:
+                            self.board[row][col] = Bishop(self.canvas, self, color, row, Figure.list_of_x_coords[col])
+                        elif choose1 == 3:
+                            self.board[row][col] = Rook(self.canvas, self, color, row, Figure.list_of_x_coords[col],
+                                                                   have_ever_moved=True)
+                        elif choose1 == 4:
+                            self.board[row][col] = Queen(self.canvas, self, color, row, Figure.list_of_x_coords[col])
                     self.first_click = None
                     for h in range(8):
                         for j in range(8):
