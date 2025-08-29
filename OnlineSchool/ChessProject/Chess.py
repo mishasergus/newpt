@@ -1145,6 +1145,55 @@ class King(Figure):
                         self.variants.append([self.y_cord - 1, self.x_cord - 1])
                 else:
                     self.variants.append([self.y_cord - 1, self.x_cord - 1])
+        if not self.have_ever_moved and not checker:
+            canCastle = True
+            for i in range(1,5):
+                if self.x_cord - i == -1:
+                    canCastle = False
+                    break
+                obj = self.game.board[self.y_cord][self.x_cord - i]
+                if obj is not None:
+                    if isinstance(obj, Rook):
+                        if not obj.have_ever_moved:
+                            break
+                    canCastle = False
+            if (canCastle and isinstance(self.game.board[0][0], Rook) and not self.game.board[0][0].have_ever_moved
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 2)
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord - 1)
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord)):
+                self.points.append(self.canvas.create_oval(
+                    self.center_x - 5 - self.game.cell_width * 2, self.center_y - 5,
+                    self.center_x + 5 - self.game.cell_width * 2, self.center_y + 5,
+                    fill="gray",
+                    outline=""  # прибираю чорну обводку
+                ))
+                self.variants.append([self.y_cord, self.x_cord - 2, self.y_cord, self.x_cord - 1, True])
+        if not self.have_ever_moved and not checker:
+            canCastle = True
+            for i in range(1,5):
+                if self.x_cord + i == 8:
+                    canCastle = False
+                    break
+                obj = self.game.board[self.y_cord][self.x_cord + i]
+                if obj is not None:
+                    if isinstance(obj, Rook):
+                        if not obj.have_ever_moved:
+                            break
+                    canCastle = False
+            if (canCastle and isinstance(self.game.board[0][7], Rook) and not self.game.board[0][7].have_ever_moved
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 2)
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord + 1)
+            and not self.game_ref.is_square_under_attack(self.y_cord, self.x_cord)):
+                self.points.append(self.canvas.create_oval(
+                    self.center_x - 5 + self.game.cell_width * 2, self.center_y - 5,
+                    self.center_x + 5 + self.game.cell_width * 2, self.center_y + 5,
+                    fill="gray",
+                    outline=""  # прибираю чорну обводку
+                ))
+                self.variants.append([self.y_cord, self.x_cord + 2, self.y_cord, self.x_cord + 1, False])
+
+
+
 
 
     def move(self, y_cord, x_cord, game_rev = False):
@@ -1312,8 +1361,17 @@ class Chess:#клас гри
                     if self.board[row][col] is not None:
                         self.canvas.delete(self.board[row][col].figure_id)
                     if self.board[row][col] is None and len(on_cl.variants[i]) == 3 and self.board[row-1][col] is not None:
-                            self.canvas.delete(self.board[row-1][col].figure_id)
-                            self.board[row - 1][col] = None
+                        self.canvas.delete(self.board[row-1][col].figure_id)
+                        self.board[row - 1][col] = None
+                    if len(on_cl.variants[i]) == 5:
+                        if on_cl.variants[i][4]:
+                            self.board[on_cl.variants[i][2]][on_cl.variants[i][3]] = self.board[0][0]
+                            self.board[on_cl.variants[i][2]][on_cl.variants[i][3]].move(on_cl.variants[i][2], on_cl.variants[i][3])
+                            self.board[0][0] = None
+                        else:
+                            self.board[on_cl.variants[i][2]][on_cl.variants[i][3]] = self.board[0][7]
+                            self.board[on_cl.variants[i][2]][on_cl.variants[i][3]].move(on_cl.variants[i][2], on_cl.variants[i][3])
+                            self.board[0][7] = None
                     self.board[row][col] = on_cl
                     self.board[row][col].move(row, col)
                     on_cl.delete_variants()
